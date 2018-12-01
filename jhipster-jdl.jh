@@ -1,0 +1,37 @@
+entity Task {
+    description String
+	created ZonedDateTime
+    deadlineTime ZonedDateTime
+    priority Priority
+    status TaskStatus
+}
+
+entity Project {
+	name String
+    created ZonedDateTime
+    deadlineTime ZonedDateTime
+    priority Priority
+}
+
+entity Comment {
+	content String
+}
+
+entity Tag {
+	name String
+}
+
+enum TaskStatus {
+	CREATED, TODO, DONE
+}
+
+enum Priority {
+	TOP, MEDIUM, MEH
+}
+
+relationship OneToMany {
+	Project{task} to Task
+    Task{comment} to Comment
+    Task{tag} to Tag
+}
+
