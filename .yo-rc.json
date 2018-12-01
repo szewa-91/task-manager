@@ -1,0 +1,33 @@
+{
+  "generator-jhipster": {
+    "promptValues": {
+      "packageName": "eu.marcinszewczyk"
+    },
+    "jhipsterVersion": "5.7.0",
+    "applicationType": "monolith",
+    "baseName": "TaskManager",
+    "packageName": "eu.marcinszewczyk",
+    "packageFolder": "eu/marcinszewczyk",
+    "serverPort": "8080",
+    "authenticationType": "jwt",
+    "cacheProvider": "ehcache",
+    "enableHibernateCache": true,
+    "websocket": false,
+    "databaseType": "sql",
+    "devDatabaseType": "h2Disk",
+    "prodDatabaseType": "mysql",
+    "searchEngine": false,
+    "messageBroker": false,
+    "serviceDiscoveryType": "eureka",
+    "buildTool": "maven",
+    "enableSwaggerCodegen": false,
+    "jwtSecretKey": "ZmU3OTUxODA2YTVjNTg2NzMyNTcyMWMwODNjNTA3NDRlMTI0NjQzZjBjMWZiYzNmNjZhNTIzMTI1NWZhZTE2ZDY5ZGY2ODQzNDIyYmI3NmE3Y2I5ZjkyNjg2M2U0NzJmOTIwNTFjYjk4ZDk2NGFiNzVhNzcwMWE5MGEzOGFhZmI=",
+    "clientFramework": "angularX",
+    "useSass": true,
+    "clientPackageManager": "npm",
+    "testFrameworks": [],
+    "jhiPrefix": "jhi",
+    "otherModules": [],
+    "enableTranslation": false
+  }
+}
