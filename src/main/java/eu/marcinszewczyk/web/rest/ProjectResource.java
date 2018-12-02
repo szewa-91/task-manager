@@ -3,6 +3,7 @@ package eu.marcinszewczyk.web.rest;
 import com.codahale.metrics.annotation.Timed;
 import eu.marcinszewczyk.domain.Project;
 import eu.marcinszewczyk.repository.ProjectRepository;
+import eu.marcinszewczyk.service.UserService;
 import eu.marcinszewczyk.web.rest.errors.BadRequestAlertException;
 import eu.marcinszewczyk.web.rest.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -16,6 +17,7 @@ import java.net.URISyntaxException;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * REST controller for managing Project.
@@ -29,9 +31,11 @@ public class ProjectResource {
     private static final String ENTITY_NAME = "project";
 
     private final ProjectRepository projectRepository;
+    private final UserService userService;
 
-    public ProjectResource(ProjectRepository projectRepository) {
+    public ProjectResource(ProjectRepository projectRepository, UserService userService) {
         this.projectRepository = projectRepository;
+        this.userService = userService;
     }
 
     /**
@@ -48,7 +52,7 @@ public class ProjectResource {
         if (project.getId() != null) {
             throw new BadRequestAlertException("A new project cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        Project result = projectRepository.save(project);
+        Project result = projectRepository.save(project.user(userService.getCurrentUserId()));
         return ResponseEntity.created(new URI("/api/projects/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -70,6 +74,9 @@ public class ProjectResource {
         if (project.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
+        if (!userService.verifyEntityUser(project)) {
+            throw new BadRequestAlertException("It's not yours!", ENTITY_NAME, "user");
+        }
         Project result = projectRepository.save(project);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, project.getId().toString()))
@@ -85,7 +92,9 @@ public class ProjectResource {
     @Timed
     public List<Project> getAllProjects() {
         log.debug("REST request to get all Projects");
-        return projectRepository.findAll();
+        return projectRepository.findAll().stream()
+            .filter(userService::verifyEntityUser)
+            .collect(Collectors.toList());
     }
 
     /**
@@ -99,6 +108,9 @@ public class ProjectResource {
     public ResponseEntity<Project> getProject(@PathVariable Long id) {
         log.debug("REST request to get Project : {}", id);
         Optional<Project> project = projectRepository.findById(id);
+        if (project.isPresent() && !userService.verifyEntityUser(project.get())) {
+            throw new BadRequestAlertException("It's not yours!", ENTITY_NAME, "user");
+        }
         return ResponseUtil.wrapOrNotFound(project);
     }
 
@@ -112,6 +124,11 @@ public class ProjectResource {
     @Timed
     public ResponseEntity<Void> deleteProject(@PathVariable Long id) {
         log.debug("REST request to delete Project : {}", id);
+
+        Optional<Project> task = projectRepository.findById(id);
+        if (task.isPresent() && !userService.verifyEntityUser(task.get())) {
+            throw new BadRequestAlertException("It's not yours!", ENTITY_NAME, "user");
+        }
 
         projectRepository.deleteById(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();

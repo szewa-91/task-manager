@@ -15,7 +15,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "tag")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class Tag implements Serializable {
+public class Tag implements Serializable, UserAware {
 
     private static final long serialVersionUID = 1L;
 

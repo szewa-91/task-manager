@@ -1,6 +1,5 @@
 package eu.marcinszewczyk.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -20,7 +19,7 @@ import eu.marcinszewczyk.domain.enumeration.Priority;
 @Entity
 @Table(name = "project")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class Project implements Serializable {
+public class Project implements Serializable, UserAware {
 
     private static final long serialVersionUID = 1L;
 

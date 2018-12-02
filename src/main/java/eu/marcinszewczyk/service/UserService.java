@@ -3,6 +3,7 @@ package eu.marcinszewczyk.service;
 import eu.marcinszewczyk.config.Constants;
 import eu.marcinszewczyk.domain.Authority;
 import eu.marcinszewczyk.domain.User;
+import eu.marcinszewczyk.domain.UserAware;
 import eu.marcinszewczyk.repository.AuthorityRepository;
 import eu.marcinszewczyk.repository.UserRepository;
 import eu.marcinszewczyk.security.AuthoritiesConstants;
@@ -17,6 +18,7 @@ import org.springframework.cache.CacheManager;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.security.access.AuthorizationServiceException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -261,6 +263,17 @@ public class UserService {
     @Transactional(readOnly = true)
     public Optional<User> getUserWithAuthorities() {
         return SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOneWithAuthoritiesByLogin);
+    }
+
+    public boolean verifyEntityUser(UserAware entity) {
+        return getUserWithAuthorities()
+            .map(User::getId)
+            .map(id -> entity.getUser()
+                .equals(id)).orElse(false);
+    }
+
+    public Long getCurrentUserId() {
+        return getUserWithAuthorities().map(User::getId).orElseThrow(() -> new AuthorizationServiceException(""));
     }
 
     /**

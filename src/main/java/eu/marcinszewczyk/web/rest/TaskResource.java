@@ -3,6 +3,7 @@ package eu.marcinszewczyk.web.rest;
 import com.codahale.metrics.annotation.Timed;
 import eu.marcinszewczyk.domain.Task;
 import eu.marcinszewczyk.repository.TaskRepository;
+import eu.marcinszewczyk.service.UserService;
 import eu.marcinszewczyk.web.rest.errors.BadRequestAlertException;
 import eu.marcinszewczyk.web.rest.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -13,9 +14,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * REST controller for managing Task.
@@ -30,8 +31,12 @@ public class TaskResource {
 
     private final TaskRepository taskRepository;
 
-    public TaskResource(TaskRepository taskRepository) {
+    private final UserService userService;
+
+
+    public TaskResource(TaskRepository taskRepository, UserService userService) {
         this.taskRepository = taskRepository;
+        this.userService = userService;
     }
 
     /**
@@ -48,7 +53,7 @@ public class TaskResource {
         if (task.getId() != null) {
             throw new BadRequestAlertException("A new task cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        Task result = taskRepository.save(task);
+        Task result = taskRepository.save(task.user(userService.getCurrentUserId()));
         return ResponseEntity.created(new URI("/api/tasks/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -70,6 +75,9 @@ public class TaskResource {
         if (task.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
+        if (!userService.verifyEntityUser(task)) {
+            throw new BadRequestAlertException("It's not yours!", ENTITY_NAME, "user");
+        }
         Task result = taskRepository.save(task);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, task.getId().toString()))
@@ -85,7 +93,9 @@ public class TaskResource {
     @Timed
     public List<Task> getAllTasks() {
         log.debug("REST request to get all Tasks");
-        return taskRepository.findAll();
+        return taskRepository.findAll().stream()
+            .filter(userService::verifyEntityUser)
+            .collect(Collectors.toList());
     }
 
     /**
@@ -99,6 +109,9 @@ public class TaskResource {
     public ResponseEntity<Task> getTask(@PathVariable Long id) {
         log.debug("REST request to get Task : {}", id);
         Optional<Task> task = taskRepository.findById(id);
+        if (task.isPresent() && !userService.verifyEntityUser(task.get())) {
+            throw new BadRequestAlertException("It's not yours!", ENTITY_NAME, "user");
+        }
         return ResponseUtil.wrapOrNotFound(task);
     }
 
@@ -112,6 +125,11 @@ public class TaskResource {
     @Timed
     public ResponseEntity<Void> deleteTask(@PathVariable Long id) {
         log.debug("REST request to delete Task : {}", id);
+
+        Optional<Task> task = taskRepository.findById(id);
+        if (task.isPresent() && !userService.verifyEntityUser(task.get())) {
+            throw new BadRequestAlertException("It's not yours!", ENTITY_NAME, "user");
+        }
 
         taskRepository.deleteById(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();

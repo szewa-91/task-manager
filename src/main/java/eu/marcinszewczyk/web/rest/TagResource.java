@@ -3,6 +3,7 @@ package eu.marcinszewczyk.web.rest;
 import com.codahale.metrics.annotation.Timed;
 import eu.marcinszewczyk.domain.Tag;
 import eu.marcinszewczyk.repository.TagRepository;
+import eu.marcinszewczyk.service.UserService;
 import eu.marcinszewczyk.web.rest.errors.BadRequestAlertException;
 import eu.marcinszewczyk.web.rest.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -16,6 +17,7 @@ import java.net.URISyntaxException;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * REST controller for managing Tag.
@@ -29,9 +31,11 @@ public class TagResource {
     private static final String ENTITY_NAME = "tag";
 
     private final TagRepository tagRepository;
+    private final UserService userService;
 
-    public TagResource(TagRepository tagRepository) {
+    public TagResource(TagRepository tagRepository, UserService userService) {
         this.tagRepository = tagRepository;
+        this.userService = userService;
     }
 
     /**
@@ -48,7 +52,7 @@ public class TagResource {
         if (tag.getId() != null) {
             throw new BadRequestAlertException("A new tag cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        Tag result = tagRepository.save(tag);
+        Tag result = tagRepository.save(tag.user(userService.getCurrentUserId()));
         return ResponseEntity.created(new URI("/api/tags/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -70,6 +74,9 @@ public class TagResource {
         if (tag.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
+        if (!userService.verifyEntityUser(tag)) {
+            throw new BadRequestAlertException("It's not yours!", ENTITY_NAME, "user");
+        }
         Tag result = tagRepository.save(tag);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, tag.getId().toString()))
@@ -85,7 +92,9 @@ public class TagResource {
     @Timed
     public List<Tag> getAllTags() {
         log.debug("REST request to get all Tags");
-        return tagRepository.findAll();
+        return tagRepository.findAll().stream()
+            .filter(userService::verifyEntityUser)
+            .collect(Collectors.toList());
     }
 
     /**
@@ -99,6 +108,9 @@ public class TagResource {
     public ResponseEntity<Tag> getTag(@PathVariable Long id) {
         log.debug("REST request to get Tag : {}", id);
         Optional<Tag> tag = tagRepository.findById(id);
+        if (tag.isPresent() && !userService.verifyEntityUser(tag.get())) {
+            throw new BadRequestAlertException("It's not yours!", ENTITY_NAME, "user");
+        }
         return ResponseUtil.wrapOrNotFound(tag);
     }
 
@@ -112,6 +124,11 @@ public class TagResource {
     @Timed
     public ResponseEntity<Void> deleteTag(@PathVariable Long id) {
         log.debug("REST request to delete Tag : {}", id);
+
+        Optional<Tag> task = tagRepository.findById(id);
+        if (task.isPresent() && !userService.verifyEntityUser(task.get())) {
+            throw new BadRequestAlertException("It's not yours!", ENTITY_NAME, "user");
+        }
 
         tagRepository.deleteById(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
