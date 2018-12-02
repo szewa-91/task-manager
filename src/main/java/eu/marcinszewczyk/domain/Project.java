@@ -41,6 +41,9 @@ public class Project implements Serializable {
     @Column(name = "priority")
     private Priority priority;
 
+    @Column(name = "jhi_user")
+    private Long user;
+
     @OneToMany(mappedBy = "project")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Task> tasks = new HashSet<>();
@@ -105,6 +108,19 @@ public class Project implements Serializable {
         this.priority = priority;
     }
 
+    public Long getUser() {
+        return user;
+    }
+
+    public Project user(Long user) {
+        this.user = user;
+        return this;
+    }
+
+    public void setUser(Long user) {
+        this.user = user;
+    }
+
     public Set<Task> getTasks() {
         return tasks;
     }
@@ -159,6 +175,7 @@ public class Project implements Serializable {
             ", created='" + getCreated() + "'" +
             ", deadlineTime='" + getDeadlineTime() + "'" +
             ", priority='" + getPriority() + "'" +
+            ", user=" + getUser() +
             "}";
     }
 }

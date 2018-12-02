@@ -26,6 +26,9 @@ public class Comment implements Serializable {
     @Column(name = "content")
     private String content;
 
+    @Column(name = "jhi_user")
+    private Long user;
+
     @ManyToOne
     @JsonIgnoreProperties("comments")
     private Task task;
@@ -50,6 +53,19 @@ public class Comment implements Serializable {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public Long getUser() {
+        return user;
+    }
+
+    public Comment user(Long user) {
+        this.user = user;
+        return this;
+    }
+
+    public void setUser(Long user) {
+        this.user = user;
     }
 
     public Task getTask() {
@@ -91,6 +107,7 @@ public class Comment implements Serializable {
         return "Comment{" +
             "id=" + getId() +
             ", content='" + getContent() + "'" +
+            ", user=" + getUser() +
             "}";
     }
 }

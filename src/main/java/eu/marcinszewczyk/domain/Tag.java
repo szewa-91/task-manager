@@ -26,6 +26,9 @@ public class Tag implements Serializable {
     @Column(name = "name")
     private String name;
 
+    @Column(name = "jhi_user")
+    private Long user;
+
     @ManyToOne
     @JsonIgnoreProperties("tags")
     private Task task;
@@ -50,6 +53,19 @@ public class Tag implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Long getUser() {
+        return user;
+    }
+
+    public Tag user(Long user) {
+        this.user = user;
+        return this;
+    }
+
+    public void setUser(Long user) {
+        this.user = user;
     }
 
     public Task getTask() {
@@ -91,6 +107,7 @@ public class Tag implements Serializable {
         return "Tag{" +
             "id=" + getId() +
             ", name='" + getName() + "'" +
+            ", user=" + getUser() +
             "}";
     }
 }

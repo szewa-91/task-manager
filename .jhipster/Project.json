@@ -17,6 +17,10 @@
             "fieldName": "priority",
             "fieldType": "Priority",
             "fieldValues": "TOP,MEDIUM,MEH"
+        },
+        {
+            "fieldName": "user",
+            "fieldType": "Long"
         }
     ],
     "relationships": [

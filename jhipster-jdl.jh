@@ -4,6 +4,7 @@ entity Task {
     deadlineTime ZonedDateTime
     priority Priority
     status TaskStatus
+    user Long
 }
 
 entity Project {
@@ -11,14 +12,17 @@ entity Project {
     created ZonedDateTime
     deadlineTime ZonedDateTime
     priority Priority
+    user Long
 }
 
 entity Comment {
 	content String
+    user Long
 }
 
 entity Tag {
 	name String
+    user Long
 }
 
 enum TaskStatus {

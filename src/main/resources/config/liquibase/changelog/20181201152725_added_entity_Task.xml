@@ -42,6 +42,10 @@
                 <constraints nullable="true" />
             </column>
 
+            <column name="jhi_user" type="bigint">
+                <constraints nullable="true" />
+            </column>
+
             <column name="project_id" type="bigint">
                 <constraints nullable="true" />
             </column>

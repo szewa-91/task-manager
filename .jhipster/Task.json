@@ -22,6 +22,10 @@
             "fieldName": "status",
             "fieldType": "TaskStatus",
             "fieldValues": "CREATED,TODO,DONE"
+        },
+        {
+            "fieldName": "user",
+            "fieldType": "Long"
         }
     ],
     "relationships": [

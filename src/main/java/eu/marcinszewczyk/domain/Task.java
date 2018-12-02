@@ -48,6 +48,9 @@ public class Task implements Serializable {
     @Column(name = "status")
     private TaskStatus status;
 
+    @Column(name = "jhi_user")
+    private Long user;
+
     @OneToMany(mappedBy = "task")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Comment> comments = new HashSet<>();
@@ -130,6 +133,19 @@ public class Task implements Serializable {
 
     public void setStatus(TaskStatus status) {
         this.status = status;
+    }
+
+    public Long getUser() {
+        return user;
+    }
+
+    public Task user(Long user) {
+        this.user = user;
+        return this;
+    }
+
+    public void setUser(Long user) {
+        this.user = user;
     }
 
     public Set<Comment> getComments() {
@@ -225,6 +241,7 @@ public class Task implements Serializable {
             ", deadlineTime='" + getDeadlineTime() + "'" +
             ", priority='" + getPriority() + "'" +
             ", status='" + getStatus() + "'" +
+            ", user=" + getUser() +
             "}";
     }
 }
