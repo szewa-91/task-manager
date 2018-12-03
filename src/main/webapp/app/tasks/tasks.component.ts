@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { TaskService } from 'app/entities/task';
 import { ITask, TaskStatus } from 'app/shared/model/task.model';
 import { Subscription } from 'rxjs';
@@ -11,7 +11,7 @@ import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
     templateUrl: './tasks.component.html',
     styles: []
 })
-export class TasksComponent implements OnInit {
+export class TasksComponent implements OnInit, OnDestroy {
     tasksToDo: ITask[];
     createdTasks: ITask[];
     currentAccount: any;
@@ -27,7 +27,7 @@ export class TasksComponent implements OnInit {
     loadAll() {
         this.taskService.query().subscribe(
             (res: HttpResponse<ITask[]>) => {
-                let allTasks = res.body;
+                const allTasks = res.body;
 
                 this.tasksToDo = allTasks.filter(task => task.status === 'TODO');
                 this.createdTasks = allTasks.filter(task => task.status === 'CREATED');

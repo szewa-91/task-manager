@@ -8,9 +8,13 @@
     <mat-grid-tile>
         <mat-selection-list #todo>
             <mat-list *ngFor="let task of tasksToDo">
-                <span>{{task.description}}</span>
                 <span>
-                    <button (click)="moveToDone(task)">
+                    <mat-card>
+                        {{task.description}}
+                    </mat-card>
+                    </span>
+                <span>
+                    <button mat-raised-button (click)="moveToDone(task)">
                       Done!
                     </button>
                 </span>
