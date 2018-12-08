@@ -1,41 +1,38 @@
-<mat-grid-list cols="2" rowHeight="2:1">
-    <mat-grid-tile>
+<div class="row">
+    <div class="col-md-6">
         <h2>Tasks to do:</h2>
-    </mat-grid-tile>
-    <mat-grid-tile>
+    </div>
+
+    <div class="col-md-6">
         <h2>Created tasks:</h2>
-    </mat-grid-tile>
-    <mat-grid-tile>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-md-6">
         <mat-selection-list #todo>
             <mat-list *ngFor="let task of tasksToDo">
-                <span>
-                    <mat-card>
-                        {{task.description}}
-                    </mat-card>
-                    </span>
-                <span>
-                    <button mat-raised-button (click)="moveToDone(task)">
-                      Done!
-                    </button>
-                </span>
+            <span>
+                <mat-card>{{task.description}}</mat-card>
+            </span>
+            <span>
+                <button mat-raised-button (click)="moveToDone(task)">Done!</button>
+                <button mat-raised-button (click)="moveToCreated(task)">I'll do it later...</button>
+            </span>
             </mat-list>
         </mat-selection-list>
-    </mat-grid-tile>
-    <mat-grid-tile>
+    </div>
+    <div class="col-md-6">
         <mat-selection-list #created>
             <mat-list *ngFor="let task of createdTasks">
-                <span>{{task.description}}</span>
+                <span><mat-card>{{task.description}}</mat-card></span>
                 <span>
-                    <button (click)="moveToToDo(task)">
-                      Move
-                    </button>
+                    <button mat-raised-button (click)="moveToToDo(task)">Set as ToDo</button>
+                    <button mat-raised-button (click)="moveToDone(task)">Done!</button>
+                    <button mat-raised-button>Naaah...</button>
                 </span>
             </mat-list>
         </mat-selection-list>
-    </mat-grid-tile>
-</mat-grid-list>
-
-
-<!--<p>-->
-<!--Options selected: {{tasks.selectedOptions.selected.length}}-->
-<!--</p>-->
+    </div>
+</div>

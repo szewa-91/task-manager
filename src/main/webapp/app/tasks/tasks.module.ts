@@ -1,22 +1,12 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { TasksComponent } from './tasks.component';
 import { TaskService } from 'app/entities/task';
 import { ProjectService } from 'app/entities/project';
-import { MatButtonModule, MatGridListModule, MatIconModule, MatListModule, MatCardModule } from '@angular/material';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MaterialModule } from 'app/material/material.module';
+import { CommonModule } from '@angular/common';
 
 @NgModule({
-    imports: [
-        CommonModule,
-        MatButtonModule,
-        MatCardModule,
-        MatListModule,
-        MatIconModule,
-        MatGridListModule,
-        FormsModule,
-        ReactiveFormsModule
-    ],
+    imports: [CommonModule, MaterialModule],
     providers: [TaskService, ProjectService],
     declarations: [TasksComponent],
     exports: [TasksComponent]

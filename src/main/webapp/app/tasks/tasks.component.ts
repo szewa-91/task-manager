@@ -60,13 +60,20 @@ export class TasksComponent implements OnInit, OnDestroy {
         this.jhiAlertService.error(errorMessage, null, null);
     }
 
-    moveToDone(task: ITask) {
-        task.status = TaskStatus.DONE;
-        this.taskService.update(task).subscribe(() => this.loadAll());
+    moveToCreated(task: ITask) {
+        this.moveTask(task, TaskStatus.CREATED);
     }
 
     moveToToDo(task: ITask) {
-        task.status = TaskStatus.TODO;
+        this.moveTask(task, TaskStatus.TODO);
+    }
+
+    moveToDone(task: ITask) {
+        this.moveTask(task, TaskStatus.DONE);
+    }
+
+    moveTask(task: ITask, status: TaskStatus) {
+        task.status = status;
         this.taskService.update(task).subscribe(() => this.loadAll());
     }
 }
