@@ -1,9 +1,16 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatButtonModule, MatCardModule, MatCheckboxModule, MatGridListModule, MatListModule, MatTabsModule } from '@angular/material';
+import {
+    MatButtonModule,
+    MatCardModule,
+    MatCheckboxModule,
+    MatGridListModule,
+    MatListModule,
+    MatPaginatorModule,
+    MatTabsModule
+} from '@angular/material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
-import { MatPaginatorModule } from '@angular/material/typings/esm5/paginator';
 
 @NgModule({
     imports: [

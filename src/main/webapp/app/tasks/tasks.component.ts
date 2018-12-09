@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { ITask, Task } from 'app/shared/model/task.model';
+import { Task } from 'app/shared/model/task.model';
 
 @Component({
     selector: 'jhi-tasks',
@@ -8,7 +8,7 @@ import { ITask, Task } from 'app/shared/model/task.model';
 })
 export class TasksComponent implements OnInit {
     @Input()
-    tasks: ITask[];
+    tasks: Task[];
     @Output()
     moveToDone: EventEmitter<Task> = new EventEmitter<Task>();
     @Output()

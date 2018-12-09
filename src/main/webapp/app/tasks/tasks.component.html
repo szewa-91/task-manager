@@ -6,7 +6,7 @@
             <span>
                 <button *ngIf="moveToDone.observers.length > 0" mat-raised-button (click)="moveToDone.emit(task)">Done!</button>
                 <button *ngIf="moveToCreated.observers.length > 0" mat-raised-button (click)="moveToCreated.emit(task)">I'll do it later...</button>
-                <button *ngIf="moveToTodo.observers.length > 0" mat-raised-button (click)="moveToCreated.emit(task)">Set as To Do</button>
+                <button *ngIf="moveToTodo.observers.length > 0" mat-raised-button (click)="moveToTodo.emit(task)">Set as To Do</button>
             </span>
         </mat-list>
     </mat-selection-list>
