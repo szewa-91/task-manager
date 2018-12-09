@@ -1,79 +1,22 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { TaskService } from 'app/entities/task';
-import { ITask, TaskStatus } from 'app/shared/model/task.model';
-import { Subscription } from 'rxjs';
-import { JhiAlertService, JhiEventManager } from 'ng-jhipster';
-import { Principal } from 'app/core';
-import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ITask, Task } from 'app/shared/model/task.model';
 
 @Component({
     selector: 'jhi-tasks',
     templateUrl: './tasks.component.html',
     styles: []
 })
-export class TasksComponent implements OnInit, OnDestroy {
-    tasksToDo: ITask[];
-    createdTasks: ITask[];
-    currentAccount: any;
-    eventSubscriber: Subscription;
+export class TasksComponent implements OnInit {
+    @Input()
+    tasks: ITask[];
+    @Output()
+    moveToDone: EventEmitter<Task> = new EventEmitter<Task>();
+    @Output()
+    moveToTodo: EventEmitter<Task> = new EventEmitter<Task>();
+    @Output()
+    moveToCreated: EventEmitter<Task> = new EventEmitter<Task>();
 
-    constructor(
-        private taskService: TaskService,
-        private jhiAlertService: JhiAlertService,
-        private eventManager: JhiEventManager,
-        private principal: Principal
-    ) {}
+    constructor() {}
 
-    loadAll() {
-        this.taskService.query().subscribe(
-            (res: HttpResponse<ITask[]>) => {
-                const allTasks = res.body;
-
-                this.tasksToDo = allTasks.filter(task => task.status === 'TODO');
-                this.createdTasks = allTasks.filter(task => task.status === 'CREATED');
-            },
-            (res: HttpErrorResponse) => this.onError(res.message)
-        );
-    }
-
-    ngOnInit() {
-        this.loadAll();
-        this.principal.identity().then(account => {
-            this.currentAccount = account;
-        });
-        this.registerChangeInTasks();
-    }
-
-    ngOnDestroy() {
-        this.eventManager.destroy(this.eventSubscriber);
-    }
-
-    trackId(index: number, item: ITask) {
-        return item.id;
-    }
-
-    registerChangeInTasks() {
-        this.eventSubscriber = this.eventManager.subscribe('taskListModification', response => this.loadAll());
-    }
-
-    private onError(errorMessage: string) {
-        this.jhiAlertService.error(errorMessage, null, null);
-    }
-
-    moveToCreated(task: ITask) {
-        this.moveTask(task, TaskStatus.CREATED);
-    }
-
-    moveToToDo(task: ITask) {
-        this.moveTask(task, TaskStatus.TODO);
-    }
-
-    moveToDone(task: ITask) {
-        this.moveTask(task, TaskStatus.DONE);
-    }
-
-    moveTask(task: ITask, status: TaskStatus) {
-        task.status = status;
-        this.taskService.update(task).subscribe(() => this.loadAll());
-    }
+    ngOnInit() {}
 }

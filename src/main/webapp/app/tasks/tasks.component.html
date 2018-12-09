@@ -1,38 +1,12 @@
-<div class="row">
-    <div class="col-md-6">
-        <h2>Tasks to do:</h2>
-    </div>
-
-    <div class="col-md-6">
-        <h2>Created tasks:</h2>
-    </div>
-</div>
-
-
-<div class="row">
-    <div class="col-md-6">
-        <mat-selection-list #todo>
-            <mat-list *ngFor="let task of tasksToDo">
+    <mat-selection-list #todo>
+        <mat-list *ngFor="let task of tasks">
             <span>
                 <mat-card>{{task.description}}</mat-card>
             </span>
             <span>
-                <button mat-raised-button (click)="moveToDone(task)">Done!</button>
-                <button mat-raised-button (click)="moveToCreated(task)">I'll do it later...</button>
+                <button *ngIf="moveToDone.observers.length > 0" mat-raised-button (click)="moveToDone.emit(task)">Done!</button>
+                <button *ngIf="moveToCreated.observers.length > 0" mat-raised-button (click)="moveToCreated.emit(task)">I'll do it later...</button>
+                <button *ngIf="moveToTodo.observers.length > 0" mat-raised-button (click)="moveToCreated.emit(task)">Set as To Do</button>
             </span>
-            </mat-list>
-        </mat-selection-list>
-    </div>
-    <div class="col-md-6">
-        <mat-selection-list #created>
-            <mat-list *ngFor="let task of createdTasks">
-                <span><mat-card>{{task.description}}</mat-card></span>
-                <span>
-                    <button mat-raised-button (click)="moveToToDo(task)">Set as ToDo</button>
-                    <button mat-raised-button (click)="moveToDone(task)">Done!</button>
-                    <button mat-raised-button>Naaah...</button>
-                </span>
-            </mat-list>
-        </mat-selection-list>
-    </div>
-</div>
+        </mat-list>
+    </mat-selection-list>
