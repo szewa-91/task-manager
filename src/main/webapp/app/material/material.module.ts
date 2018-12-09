@@ -1,16 +1,9 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-    MatButtonModule,
-    MatCardModule,
-    MatCheckboxModule,
-    MatGridListModule,
-    MatListModule,
-    MatPaginatorModule,
-    MatTabsModule
-} from '@angular/material';
+import { MatButtonModule, MatCardModule, MatCheckboxModule, MatGridListModule, MatListModule, MatPaginatorModule } from '@angular/material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
+import { MatTabsModule } from '@angular/material/tabs';
 
 @NgModule({
     imports: [

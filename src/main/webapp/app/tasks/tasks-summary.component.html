@@ -1,46 +1,33 @@
-<mat-checkbox>Check me!</mat-checkbox>
 <mat-tab-group>
-    <mat-tab label="ToDo">
-        <h1>Some tab content</h1>
-        <p>...</p>
-    </mat-tab>
-    <mat-tab label="Created">
-        <h1>Some more tab content</h1>
-        <p>...</p>
-    </mat-tab>
-    <mat-tab label="Done">
-        <h1>Some more tab content</h1>
-        <p>...</p>
-    </mat-tab>
-</mat-tab-group>
-
-<div class="row">
-    <div class="col-xs-12 col-md-4">
-        <h2>Tasks to do:</h2>
-        <jhi-tasks
-            [tasks]="tasksToDo"
-            (moveToCreated)="moveToCreated($event)"
-            (moveToDone)="moveToDone($event)"
-        ></jhi-tasks>
-    </div>
-
-    <div class="col-xs-12 col-md-4">
+    <mat-tab label="Tasks summary">
         <div class="row">
-            <div class="col-md-8"><h2>Created tasks:</h2></div>
-            <div class="col-md-4 text-md-right"><button mat-raised-button color="primary">New task</button></div>
-        </div>
-        <jhi-tasks
-            [tasks]="createdTasks"
-            (moveToTodo)="moveToTodo($event)"
-            (moveToDone)="moveToDone($event)"
-        ></jhi-tasks>
-    </div>
+            <div class="col-xs-12 col-md-6 ">
+                <h2>Tasks to do:</h2>
+                <jhi-tasks
+                    [tasks]="tasksToDo"
+                    (moveToCreated)="moveToCreated($event)"
+                    (moveToDone)="moveToDone($event)"
+                ></jhi-tasks>
+            </div>
 
-    <div class="col-xs-12 col-md-4">
+            <div class="col-xs-12 col-md-6">
+                <div class="row">
+                    <div class="col-md-8"><h2>Created tasks:</h2></div>
+                    <div class="col-md-4 text-md-right"><button mat-icon-button color="primary"><mat-icon>add</mat-icon></button></div>
+                </div>
+                <jhi-tasks
+                    [tasks]="createdTasks"
+                    (moveToTodo)="moveToTodo($event)"
+                    (moveToDone)="moveToDone($event)"
+                ></jhi-tasks>
+            </div>
+        </div>
+    </mat-tab>
+    <mat-tab label="Finished">
         <h2>Finished tasks:</h2>
         <jhi-tasks
             [tasks]="doneTasks"
-            (moveToTodo)="moveToTodo($event)"
+            (moveToCreated)="moveToCreated($event)"
         ></jhi-tasks>
-    </div>
-</div>
+    </mat-tab>
+</mat-tab-group>

@@ -4,9 +4,15 @@
                 <mat-card>{{task.description}}</mat-card>
             </span>
             <span>
-                <button *ngIf="moveToDone.observers.length > 0" mat-raised-button (click)="moveToDone.emit(task)">Done!</button>
-                <button *ngIf="moveToCreated.observers.length > 0" mat-raised-button (click)="moveToCreated.emit(task)">I'll do it later...</button>
-                <button *ngIf="moveToTodo.observers.length > 0" mat-raised-button (click)="moveToTodo.emit(task)">Set as To Do</button>
+                <button *ngIf="moveToDone.observers.length > 0" mat-icon-button (click)="moveToDone.emit(task)">
+                    <mat-icon>done</mat-icon>
+                </button>
+                <button *ngIf="moveToCreated.observers.length > 0" mat-icon-button (click)="moveToCreated.emit(task)">
+                    <mat-icon>arrow_downward</mat-icon>
+                </button>
+                <button *ngIf="moveToTodo.observers.length > 0" mat-icon-button (click)="moveToTodo.emit(task)">
+                    <mat-icon>star</mat-icon>
+                </button>
             </span>
         </mat-list>
     </mat-selection-list>
