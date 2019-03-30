@@ -52,5 +52,10 @@ const initialState = [
 ];
 
 export default (state: Task[] = initialState, action: any) => {
-    return state;
+    switch (action.type) {
+        case 'SET_TASKS':
+            return action.payload;
+        default:
+            return state;
+    }
 };

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -53,7 +54,7 @@ public class TaskResource {
         if (task.getId() != null) {
             throw new BadRequestAlertException("A new task cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        Task result = taskRepository.save(task.user(userService.getCurrentUserId()));
+        Task result = taskRepository.save(task);
         return ResponseEntity.created(new URI("/api/tasks/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -93,9 +94,7 @@ public class TaskResource {
     @Timed
     public List<Task> getAllTasks() {
         log.debug("REST request to get all Tasks");
-        return taskRepository.findAll().stream()
-            .filter(userService::verifyEntityUser)
-            .collect(Collectors.toList());
+        return taskRepository.findAll();
     }
 
     /**
