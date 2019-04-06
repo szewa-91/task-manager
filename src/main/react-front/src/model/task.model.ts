@@ -4,15 +4,15 @@ import { ITag } from './tag.model';
 import { IProject } from './project.model';
 
 export const enum Priority {
-    TOP = 'TOP',
-    MEDIUM = 'MEDIUM',
-    MEH = 'MEH'
+    TOP = 'Top',
+    MEDIUM = 'Medium',
+    MEH = 'Meh'
 }
 
 export const enum TaskStatus {
-    CREATED = 'CREATED',
-    TODO = 'TODO',
-    DONE = 'DONE'
+    CREATED = 'Created',
+    TODO = 'To do',
+    DONE = 'Done'
 }
 
 export interface ITask {
