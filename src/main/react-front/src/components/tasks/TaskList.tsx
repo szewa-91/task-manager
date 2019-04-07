@@ -1,33 +1,42 @@
 import * as React from "react";
+import { FunctionComponent } from "react";
 import { connect } from "react-redux";
 import RootModel from "src/store/rootModel";
 import { Task } from "src/model/task.model";
 import { fetchTasks } from "src/store/tasks/tasksActions";
 import * as Modal from 'react-modal';
 import TaskDetails from "src/components/tasks/TaskDetails";
-import { FunctionComponent } from "react";
 
 export class TaskList extends React.Component<TaskListProps, TaskListState> {
     public state = {
-        open: false,
+        modalOpen: false,
         task: {}
     };
 
     public render() {
         return <div>
             <Modal
-                isOpen={this.state.open}
+                isOpen={this.state.modalOpen}
+                onRequestClose={this.closeModal}
             >
-                <TaskDetails task={this.state.task}/>
+                <TaskDetails task={this.state.task} onClose={this.closeModal}/>
             </Modal>
             <div>
-                {this.props.tasks.map(task => <TaskListItem key={task.id} task={task} onClick={this.onDetailsClicked}/>)}
+                {this.props.tasks.map(task => <TaskListItem
+                    key={task.id}
+                    task={task}
+                    onClick={this.onDetailsClicked}
+                />)}
             </div>
         </div>;
     }
 
+    private closeModal = () => {
+        this.setState(() => ({modalOpen: false, task: {}}));
+    };
+
     private onDetailsClicked = (task: Task) => {
-        this.setState(() => ({ open: true, task }));
+        this.setState(() => ({ modalOpen: true, task }));
     };
 }
 
@@ -36,7 +45,7 @@ interface TaskListProps {
 }
 
 interface TaskListState {
-    open: boolean,
+    modalOpen: boolean,
     task: Task
 }
 
